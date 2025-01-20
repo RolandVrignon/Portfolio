@@ -19,7 +19,7 @@ export const HeroSection = ({
 
   // Son pour les frames (tick.mp3)
   const [playFrameSound] = useSound("/assets/sound/tick2.mp3", {
-    volume: 0.8,
+    volume: 1,
     playbackRate: 1,
   });
 
@@ -27,7 +27,7 @@ export const HeroSection = ({
   const [playNeonSound, { stop: stopNeonSound }] = useSound(
     "/assets/sound/neon_flicker.mp3",
     {
-      volume: 0.3,
+      volume: 0.2,
       playbackRate: 1,
       loop: true, // Boucle activée pour le son néon
     }
@@ -119,7 +119,7 @@ export const HeroSection = ({
       <span
         className={`${isOnHero ? "fixed" : "hidden"} jacquard-24-regular neon-effect text-[15vw] text-[#ff0000] w-full text-center`}
       >
-        ./ roland.sh_
+         &gt; ./roland.sh_
       </span>
     </div>
   );
