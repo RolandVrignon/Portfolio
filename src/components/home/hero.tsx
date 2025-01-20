@@ -17,6 +17,29 @@ export const HeroSection = ({
   const [currentFrame, setCurrentFrame] = useState(0); // Frame actuelle
   const totalFrames = 12; // Nombre total de frames (images)
 
+  // Son pour les frames (tick.mp3)
+  const [playFrameSound] = useSound("/assets/sound/tick2.mp3", {
+    volume: 0.8,
+    playbackRate: 1,
+  });
+
+  // Son pour le néon avec contrôle d'arrêt
+  const [playNeonSound, { stop: stopNeonSound }] = useSound(
+    "/assets/sound/neon_flicker.mp3",
+    {
+      volume: 0.3,
+      playbackRate: 1,
+      loop: true, // Boucle activée pour le son néon
+    }
+  );
+
+  // Jouer le son des frames lorsque la frame change
+  useEffect(() => {
+    if (currentFrame > 0) {
+      playFrameSound(); // Joue le son uniquement si une frame est affichée
+    }
+  }, [currentFrame, playFrameSound]);
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -32,27 +55,31 @@ export const HeroSection = ({
       // Détecter quand on sort du Hero
       if (frameIndex === totalFrames - 1 && isOnHero) {
         onEnterAfterHero(); // On est sur AfterHero
+        stopNeonSound(); // Arrêter le son néon
       }
 
       // Détecter quand on revient sur le Hero
       if (frameIndex < totalFrames - 1 && !isOnHero) {
         onEnterHero(); // On est sur Hero
+        playNeonSound(); // Redémarrer le son néon si on revient
       }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [totalFrames, isOnHero, onEnterAfterHero, onEnterHero]);
+  }, [
+    totalFrames,
+    isOnHero,
+    onEnterAfterHero,
+    onEnterHero,
+    playNeonSound,
+    stopNeonSound,
+  ]);
 
-  const [play] = useSound("/assets/sound/neon_flicker.mp3", {
-    volume: 0.3,
-    playbackRate: 1,
-    loop: true,
-  });
-
+  // Jouer le son néon au chargement
   useEffect(() => {
-    play();
-  }, [play]);
+    playNeonSound(); // Joue le son au début
+  }, [playNeonSound]);
 
   return (
     <div className="relative flex justify-center items-center h-screen w-screen">
