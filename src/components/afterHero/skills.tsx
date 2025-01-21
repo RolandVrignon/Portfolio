@@ -3,11 +3,11 @@ export const SkillSection = () => {
       <section id="skills-section">
         <div className="h-[100vh] bg-white"></div>
         <div className="w-screen p-4 md:p-6 lg:p-16 flex justify-start items-end relative bg-white">
-          <div className="gothic text-8xl md:text-9xl lg:text-15xl lg:leading-15xl">
+          <div className="gothic text-[#171414] text-7xl md:text-9xl lg:text-14xl lg:leading-14xl">
             Hi, I am Roland Vrignon,<br />
             a passionate developer
             <br />
-            and design amator. {" "}
+            and a design enthusiast.
             {/* SVG directement en ligne */}
             <svg
               className="inline-block"

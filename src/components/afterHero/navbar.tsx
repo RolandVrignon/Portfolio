@@ -5,9 +5,7 @@ export const Navbar = ({ isVisible }: { isVisible: boolean }) => {
         <div
             className={`fixed z-50 top-0 w-full transition-opacity duration-300 ${isVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         >
-            <Link href="/">
-                <div className="relative w-full flex justify-center items-center">
-
+            <Link href="/" className="relative w-full flex justify-center items-center">
                     <span className="absolute jacquard-24-regular blur-sm opacity-50 text-6xl text-[#ff0000] w-full text-center">
                         &gt; ./rolandv.sh_
                     </span>
@@ -20,7 +18,6 @@ export const Navbar = ({ isVisible }: { isVisible: boolean }) => {
                     <span className="jacquard-24-regular  text-6xl text-[#ff0000] w-full text-center">
                         &gt; ./rolandv.sh_
                     </span>
-                </div>
             </Link>
         </div>
     );

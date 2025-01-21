@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import useSound from "use-sound";
 import Image from "next/image";
-import texture from "@/../public/assets/textures/texture.gif";
 
 export const HeroSection = ({
   isOnHero,
@@ -14,6 +13,7 @@ export const HeroSection = ({
   onEnterAfterHero: () => void;
   onEnterHero: () => void;
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isSoundEnabled, setIsSoundEnabled] = useState(false);
   const [currentFrame, setCurrentFrame] = useState(0); // Frame actuelle
   const totalFrames = 13; // Nombre total de frames (images)

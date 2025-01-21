@@ -69,7 +69,7 @@ export default {
 			'11xl': '12rem',   // 10rem * 1.2
 			'12xl': '14.4rem', // 12rem * 1.2
 			'13xl': '16.8rem', // 14rem * 1.2
-			'14xl': '19.2rem', // 16rem * 1.2
+			'14xl': '14rem', // 16rem * 1.2
 			'15xl': '17rem',   // 20rem * 1.2
 			'16xl': '30rem',   // 25rem * 1.2
 			'17xl': '36rem',   // 30rem * 1.2
