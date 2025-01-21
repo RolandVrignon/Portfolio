@@ -126,18 +126,6 @@ export const HeroSection = ({
       )}
 
       {/* Texture en superposition */}
-      <div
-        className={`${isOnHero ? "fixed" : "hidden"} h-full w-full mix-blend-exclusion pointer-events-none opacity-20`}
-      >
-        <Image
-          src={texture}
-          alt="Texture"
-          layout="fill"
-          objectFit="cover"
-          quality={100}
-          unoptimized
-        />
-      </div>
     </div>
   );
 };
