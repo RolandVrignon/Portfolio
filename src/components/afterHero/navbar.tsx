@@ -3,7 +3,7 @@ import Link from "next/link";
 export const Navbar = ({ isVisible }: { isVisible: boolean }) => {
     return (
         <div
-            className={`fixed top-0 w-full transition-opacity duration-300 ${isVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+            className={`fixed z-50 top-0 w-full transition-opacity duration-300 ${isVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         >
             <Link href="/">
                 <div className="relative w-full flex justify-center items-center">
