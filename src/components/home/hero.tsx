@@ -14,8 +14,9 @@ export const HeroSection = ({
   onEnterAfterHero: () => void;
   onEnterHero: () => void;
 }) => {
+  const [isSoundEnabled, setIsSoundEnabled] = useState(false);
   const [currentFrame, setCurrentFrame] = useState(0); // Frame actuelle
-  const totalFrames = 12; // Nombre total de frames (images)
+  const totalFrames = 13; // Nombre total de frames (images)
 
   // Son pour les frames (tick.mp3)
   const [playFrameSound] = useSound("/assets/sound/tick2.mp3", {
@@ -81,27 +82,36 @@ export const HeroSection = ({
     playNeonSound(); // Joue le son au début
   }, [playNeonSound]);
 
+  const enableSoundAndAnimation = () => {
+    playNeonSound(); // Joue le son
+    setIsSoundEnabled(true); // Active l'animation
+    window.removeEventListener("click", enableSoundAndAnimation); // Supprime l'écouteur
+  };
+
+  useEffect(() => {
+    // Ajoute un écouteur pour détecter une interaction utilisateur
+    window.addEventListener("click", enableSoundAndAnimation);
+
+    return () => {
+      window.removeEventListener("click", enableSoundAndAnimation);
+    };
+  }, []);
+
   return (
     <div className="relative flex justify-center items-center h-screen w-screen">
       <div className={`${isOnHero ? "fixed" : "hidden"} h-screen w-screen bg-[#171414]`}></div>
 
-      {/* Texture en superposition */}
-      <div
-        className={`${isOnHero ? "fixed" : "hidden"} h-full w-full mix-blend-exclusion pointer-events-none opacity-20`}
+      {/* Texte principal avec effet néon */}
+      <span
+        className={`${isOnHero ? "fixed" : "hidden"} jacquard-24-regular neon-effect text-[15vw] text-[#ff0000] w-full text-center`}
       >
-        <Image
-          src={texture}
-          alt="Texture"
-          layout="fill"
-          objectFit="cover"
-          quality={100}
-        />
-      </div>
+        &gt; ./rolandv.sh_
+      </span>
 
       {/* Overlay pour les frames */}
       {currentFrame > 0 && (
         <div
-          className={`${isOnHero ? "fixed" : "hidden"} top-0 left-0 w-full h-full z-50 pointer-events-none`}
+          className={`${isOnHero ? "fixed" : "hidden"} top-0 left-0 w-full h-full pointer-events-none`}
         >
           <Image
             src={`/assets/animation/vortex/sprite_${currentFrame
@@ -115,12 +125,19 @@ export const HeroSection = ({
         </div>
       )}
 
-      {/* Texte principal avec effet néon */}
-      <span
-        className={`${isOnHero ? "fixed" : "hidden"} jacquard-24-regular neon-effect text-[15vw] text-[#ff0000] w-full text-center`}
+      {/* Texture en superposition */}
+      <div
+        className={`${isOnHero ? "fixed" : "hidden"} h-full w-full mix-blend-exclusion pointer-events-none opacity-20`}
       >
-         &gt; ./roland.sh_
-      </span>
+        <Image
+          src={texture}
+          alt="Texture"
+          layout="fill"
+          objectFit="cover"
+          quality={100}
+          unoptimized
+        />
+      </div>
     </div>
   );
 };

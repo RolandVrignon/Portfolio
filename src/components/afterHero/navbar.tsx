@@ -9,16 +9,16 @@ export const Navbar = ({ isVisible }: { isVisible: boolean }) => {
                 <div className="relative w-full flex justify-center items-center">
 
                     <span className="absolute jacquard-24-regular blur-sm opacity-50 text-6xl text-[#ff0000] w-full text-center">
-                        &gt; ./roland.sh_
+                        &gt; ./rolandv.sh_
                     </span>
 
                     <span className="absolute jacquard-24-regular blur-sm opacity-50 text-6xl text-[#ff0000] w-full text-center">
-                        &gt; ./roland.sh_
+                        &gt; ./rolandv.sh_
                     </span>
 
                     {/* Texte principal */}
                     <span className="jacquard-24-regular  text-6xl text-[#ff0000] w-full text-center">
-                        &gt; ./roland.sh_
+                        &gt; ./rolandv.sh_
                     </span>
                 </div>
             </Link>
