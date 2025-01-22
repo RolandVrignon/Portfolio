@@ -1,22 +1,21 @@
 "use client";
 
+import { useRef, useState } from "react";
 import HeroSection from "@/components/home/hero";
 import AfterHero from "@/components/home/afterHero";
-import { useState } from "react";
 import Image from "next/image";
+import "locomotive-scroll/dist/locomotive-scroll.css";
 import texture from "@/../public/assets/textures/texture.gif";
 
 export default function Home() {
-  const [isOnHero, setIsOnHero] = useState(true); // Détermine si on est sur HeroSection
+  const containerRef = useRef(null);
+  const [isOnHero, setIsOnHero] = useState(true);
 
-  // Callback pour indiquer que l'utilisateur est sur HeroSection
   const handleEnterHero = () => setIsOnHero(true);
-
-  // Callback pour indiquer que l'utilisateur est sur AfterHero
   const handleEnterAfterHero = () => setIsOnHero(false);
 
   return (
-    <>
+    <div ref={containerRef}>
       <div
         className={`fixed h-full w-full mix-blend-exclusion pointer-events-none opacity-20 z-[1000]`}
       >
@@ -37,6 +36,6 @@ export default function Home() {
         />
         <AfterHero showNavbar={!isOnHero} />
       </div>
-    </>
+    </div>
   );
 }

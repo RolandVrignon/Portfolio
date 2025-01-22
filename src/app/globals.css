@@ -9,6 +9,10 @@ body {
   overflow-x: hidden;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .jacquard-24-regular {
   font-family: "Jacquard 24", serif;
   font-weight: 400;

@@ -65,7 +65,7 @@ export const SkillSection = () => {
         <div className="sticky top-0 flex flex-col items-start justify-end h-[100vh] w-screen p-5 md:p-10">
           {/* Texte aligné à gauche */}
           <div
-            className={`whitespace-pre-wrap ${isMobile ? "text-[23vw] leading-[18vw]" : "text-[11.5vw] leading-[10vw]"
+            className={`whitespace-pre-wrap ${isMobile ? "text-[23vw] leading-[18vw]" : "text-[10.5vw] leading-[8.5vw]"
               } text-left ml-0`}
           >
             <div className="gothic">
