@@ -24,8 +24,8 @@ export const SkillSection = () => {
    * 2) Préparer le texte (version desktop / mobile)
    * ----------------------------------------
    */
-  const textDesktop = `Hi, I am RolandV\na passionate developer\nand a design enthusiast`;
-  const textMobile = `Hi, I am RolandV\na passionate\ndeveloper\nand a design\nenthusiast`;
+  const textDesktop = `Hi, I am Roland\na passionate developer\nand a design enthusiast`;
+  const textMobile = `Hi, I am Roland\na passionate\ndeveloper\nand a design\nenthusiast`;
   const text = isMobile ? textMobile : textDesktop;
 
   // On découpe en lignes (tableau de chaînes)
@@ -71,6 +71,13 @@ export const SkillSection = () => {
   const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 });
   const wordRef = useRef<HTMLSpanElement>(null);
   const hasSetInitialPosition = useRef(false);
+
+  // Ajustons les constantes pour le 'l'
+  const L_POSITION = {
+    x: 0.2,  // Position du 'l' dans le mot
+    offsetX: -300,  // Décalage horizontal
+    transformOriginX: "42%"  // Point d'origine du zoom (même pourcentage que x)
+  };
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (isInView) {
@@ -133,22 +140,25 @@ export const SkillSection = () => {
 
                       return (
                         <span
-                          ref={word === "RolandV" ? wordRef : null}
+                          ref={word === "Roland" ? wordRef : null}
                           key={`${lineIndex}-${wordIndex}`}
                           style={{
                             whiteSpace: "nowrap",
                             display: "inline-block",
                             marginRight: "0.27em",
-                            position: animationPhase === 1 && word === "RolandV" ? "fixed" : "relative",
-                            top: animationPhase === 1 && word === "RolandV" ? `${initialPosition.y}px` : "auto",
-                            left: animationPhase === 1 && word === "RolandV" ? `${initialPosition.x}px` : "auto",
-                            transform: animationPhase === 1 && word === "RolandV" 
+                            position: animationPhase === 1 && word === "Roland" ? "fixed" : "relative",
+                            top: animationPhase === 1 && word === "Roland" ? `${initialPosition.y}px` : "auto",
+                            left: animationPhase === 1 && word === "Roland" ? `${initialPosition.x}px` : "auto",
+                            transform: animationPhase === 1 && word === "Roland" 
                               ? `translate(
-                                  ${zoomProgress * (window.innerWidth/2 - initialPosition.x)}px,
+                                  ${zoomProgress * (window.innerWidth/2 - initialPosition.x - (wordRef.current?.offsetWidth || 0) * L_POSITION.x + L_POSITION.offsetX)}px,
                                   ${zoomProgress * (window.innerHeight/2 - initialPosition.y)}px
                                 ) scale(${1 + (easeScale(zoomProgress) * 200)})`
                               : "none",
-                            zIndex: animationPhase === 1 && word === "RolandV" ? 50 : 1,
+                            transformOrigin: animationPhase === 1 && word === "Roland" 
+                              ? `${L_POSITION.transformOriginX} center`
+                              : "center center",
+                            zIndex: animationPhase === 1 && word === "Roland" ? 50 : 1,
                           }}
                         >
                           {letters.map((letter, letterIdx) => {
@@ -165,7 +175,7 @@ export const SkillSection = () => {
                             let letterColor = "#ccc"; // gris clair par défaut
 
                             // Vérifie si le mot est "Roland" ou "Vrignon"
-                            const isNameWord = word === "RolandV" || word === "Vrignon";
+                            const isNameWord = word === "Roland" || word === "Vrignon";
 
                             if (diff < 0) {
                               // On a déjà dépassé la lettre
