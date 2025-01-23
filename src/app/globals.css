@@ -20,9 +20,21 @@ html {
 }
 
 .gothic {
-  font-family: "League Gothic", serif;
-  font-weight: 400;
-  font-style: normal;
+  font-family: 'League Gothic', serif;
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  font-feature-settings: "kern" 1;
+  font-kerning: normal;
+}
+
+/* Pour les écrans à haute résolution */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .gothic {
+    -webkit-font-smoothing: antialiased;
+  }
 }
 
 /* Néon clignotant */
