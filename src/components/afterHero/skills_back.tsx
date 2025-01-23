@@ -24,8 +24,8 @@ export const SkillSection = () => {
    * 2) Préparer le texte (version desktop / mobile)
    * ----------------------------------------
    */
-  const textDesktop = `Hi, I am Roland Vrignon\na passionate developer\nand a design enthusiast`;
-  const textMobile = `Hi, I am Roland\nVrignon a\npassionate\ndeveloper\nand a design\nenthusiast`;
+  const textDesktop = `Hi, I am RolandV\na passionate developer\nand a design enthusiast`;
+  const textMobile = `Hi, I am RolandV\na passionate\ndeveloper\nand a design\nenthusiast`;
   const text = isMobile ? textMobile : textDesktop;
 
   // On découpe en lignes (tableau de chaînes)
@@ -66,12 +66,38 @@ export const SkillSection = () => {
   // currentIndex : index global pour savoir quelle lettre on est en train de « dépasser »
   const [currentIndex, setCurrentIndex] = useState(-5);
   const OFFSET = 15;
+  const [animationPhase, setAnimationPhase] = useState(0); // 0: reveal, 1: zoom
+  const [zoomProgress, setZoomProgress] = useState(0);
+  const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 });
+  const wordRef = useRef<HTMLSpanElement>(null);
+  const hasSetInitialPosition = useRef(false);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (isInView) {
-      // Mappe le scroll [0..1] → [-OFFSET..(totalLetters)]
-      const adjustedIndex = latest * (totalLetters + OFFSET);
-      setCurrentIndex(adjustedIndex - OFFSET);
+      if (latest <= 0.50) {
+        const adjustedIndex = (latest / 0.45) * (totalLetters + OFFSET);
+        setCurrentIndex(adjustedIndex - OFFSET);
+        setAnimationPhase(0);
+        // Reset le flag quand on revient en arrière
+        hasSetInitialPosition.current = false;
+      } 
+      else {
+        // Capture la position juste avant le changement de phase
+        if (!hasSetInitialPosition.current && wordRef.current) {
+          const rect = wordRef.current.getBoundingClientRect();
+          console.log('rect:', rect)
+          setInitialPosition({
+            x: rect.left,
+            y: rect.top
+          });
+          hasSetInitialPosition.current = true;
+        }
+        
+        setCurrentIndex(totalLetters + OFFSET);
+        setAnimationPhase(1);
+        const detachProgress = (latest - 0.50) / 0.50;
+        setZoomProgress(Math.min(1, Math.max(0, detachProgress)));
+      }
     }
   });
 
@@ -89,7 +115,7 @@ export const SkillSection = () => {
       <div className="h-[60vh] bg-white"></div>
 
       {/* Grande zone scrollable pour laisser le temps à l'animation */}
-      <div className="w-screen h-[200vh] bg-white">
+      <div className="w-screen h-[400vh] bg-white">
         <div className="sticky top-0 flex flex-col items-start justify-end h-[100vh] w-screen p-5 md:p-10">
           <div
             className={`whitespace-pre-wrap ${isMobile ? "text-[20vw] leading-[16vw]" : "text-[10.5vw] leading-[8.5vw]"
@@ -107,11 +133,22 @@ export const SkillSection = () => {
 
                       return (
                         <span
+                          ref={word === "RolandV" ? wordRef : null}
                           key={`${lineIndex}-${wordIndex}`}
                           style={{
                             whiteSpace: "nowrap",
                             display: "inline-block",
                             marginRight: "0.27em",
+                            position: animationPhase === 1 && word === "RolandV" ? "fixed" : "relative",
+                            top: animationPhase === 1 && word === "RolandV" ? `${initialPosition.y}px` : "auto",
+                            left: animationPhase === 1 && word === "RolandV" ? `${initialPosition.x}px` : "auto",
+                            transform: animationPhase === 1 && word === "RolandV" 
+                              ? `translate(
+                                  ${zoomProgress * (window.innerWidth/2 - initialPosition.x)}px,
+                                  ${zoomProgress * (window.innerHeight/2 - initialPosition.y)}px
+                                ) scale(${1 + (easeScale(zoomProgress) * 200)})`
+                              : "none",
+                            zIndex: animationPhase === 1 && word === "RolandV" ? 50 : 1,
                           }}
                         >
                           {letters.map((letter, letterIdx) => {
@@ -126,16 +163,18 @@ export const SkillSection = () => {
                             const diff = globalLetterIndex - currentIndex;
 
                             let letterColor = "#ccc"; // gris clair par défaut
-                            
+
                             // Vérifie si le mot est "Roland" ou "Vrignon"
-                            const isNameWord = word === "Roland" || word === "Vrignon";
-                            
+                            const isNameWord = word === "RolandV" || word === "Vrignon";
+
                             if (diff < 0) {
                               // On a déjà dépassé la lettre
                               letterColor = isNameWord ? "#ff0000" : "#000";
                             } else if (diff < 1) {
                               // On s'en approche
-                              letterColor = isNameWord ? "#ff0000" : "#666";
+                              letterColor = isNameWord ? "#ff5858" : "#666";
+                            } else if (diff < 2) {
+                              letterColor = isNameWord ? "#ffb9b9" : "#888";
                             }
 
                             return (
@@ -155,10 +194,12 @@ export const SkillSection = () => {
                           {/* Ajouter le SVG à la dernière lettre du dernier mot de la dernière ligne */}
                           {lineIndex === lineData.length - 1 &&
                             wordIndex === words.length - 1 && (
-                              <SVGReveal
-                                currentIndex={currentIndex}
-                                endIndex={endIndex}
-                              />
+                              <>
+                                <SVGReveal
+                                  currentIndex={currentIndex}
+                                  endIndex={endIndex}
+                                />
+                              </>
                             )}
                         </span>
                       );
@@ -282,6 +323,12 @@ const SVGReveal = ({
         v-3h-3V102z M174,117h-3v-12h-3v-9h-3V84h-3v36h3v15h9v-3h3v-3h-3V117z" />
     </motion.svg>
   );
+};
+
+// Ajoutons une fonction d'easing personnalisée
+const easeScale = (x: number): number => {
+  // Fonction exponentielle pour une accélération progressive
+  return Math.pow(x, 2); // Vous pouvez ajuster l'exposant (2, 3, 4...) pour modifier la courbe
 };
 
 export default SkillSection;
